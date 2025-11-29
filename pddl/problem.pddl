@@ -16,13 +16,13 @@
     (adjacent l0 l3)
     (adjacent l3 l0)
 
-    (visible n1 l1)
-    (visible n2 l1)
-    (visible n3 l1)
-    (visible n4 l2)
-    (visible n5 l2)
-    (visible n5 l3)
-    (visible n6 l3)
+    (reachable n1 l1)
+    (reachable n2 l1)
+    (reachable n3 l1)
+    (reachable n4 l2)
+    (reachable n5 l2)
+    (reachable n5 l3)
+    (reachable n6 l3)
 
     (link n1 n2 l1)
     (link n2 n1 l1)
@@ -50,12 +50,12 @@
     (= (buffer n6) 5)
 
     ;; capacidade máxima de buffer
-    (= (buffer-cap n1) 10)
-    (= (buffer-cap n2) 10)
-    (= (buffer-cap n3) 10)
-    (= (buffer-cap n4) 10)
-    (= (buffer-cap n5) 10)
-    (= (buffer-cap n6) 10)
+    (= (buffer-capacity n1) 10)
+    (= (buffer-capacity n2) 10)
+    (= (buffer-capacity n3) 10)
+    (= (buffer-capacity n4) 10)
+    (= (buffer-capacity n5) 10)
+    (= (buffer-capacity n6) 10)
 
     ;; custos energéticos
     (= (tx-cost n1 n2) 1.0)
@@ -79,12 +79,12 @@
     (= (tx-cost-sink n6) 1.0)
 
     ;; nada coletado inicialmente
-    (= (collected) 0)
+    (= (sink-collected) 0)
   )
 
   (:goal
     (and
-      (>= (collected) 21)
+      (>= (sink-collected) 21)
     )
   )
 

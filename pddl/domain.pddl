@@ -20,58 +20,68 @@
   (:predicates
     (at-sink ?l - location)
     (adjacent ?l1 ?l2 - location)
-    (visible ?i - sensor ?l - location)
-    (link ?i - sensor ?j - sensor ?l - location)
+    (reachable ?i - sensor ?l - location)
+    (link ?i - sensor ?j - sensor)
+    (broadcast-done ?l - location)
   )
 
   ;; ------------------------------------
   ;; Fluentes numéricos
   ;; ------------------------------------
   (:functions
-    (energy ?i - sensor)
-    (buffer ?i - sensor)
-    (buffer-cap ?i - sensor)
-
-    (collected)
-
+    (energy ?i - sensor) ; energia do sensor i
+    (buffer ?i - sensor) ; buffer do sensor i
+    (buffer-capacity) ; capacidade de buffer dos sensores 
+    (movement-cost ?l1 ?l2 - location) ; custo de movimento entre localidades
+    (sink-energy) ; energia do sink
+    (sink-collected) ; quantidade de dados coletados
+    (sink-capacity) ; capacidade do buffer do sink
     (tx-cost ?i - sensor ?j - sensor)
     (rx-cost ?i - sensor ?j - sensor)
-
     (tx-cost-sink ?i - sensor)
   )
 
-  ;; ------------------------------------
-  ;; DURATIVE-ACTION: mover o sink
-  ;; ------------------------------------
   (:durative-action move_sink
     :parameters (?from ?to - location)
     :duration (= ?duration 1)
     :condition (and
       (at start (at-sink ?from))
       (at start (adjacent ?from ?to))
+      (at start (>= (movement-cost ?from ?to) (sink-energy)))
     )
     :effect (and
       (at start (not (at-sink ?from)))
       (at end   (at-sink ?to))
+      (at end (decrease (sink-energy) (movement-cost ?from ?to)))
     )
   )
 
-  ;; ------------------------------------
-  ;; DURATIVE-ACTION: enviar 1 unidade de dado i -> j
-  ;; (roteamento sensor-sensor)
-  ;; ------------------------------------
+  (:durative-action broadcast_sink
+    :parameters (?l - location)
+    :duration (= ?duration 1)
+    :condition (and
+      (at start (at-sink ?l))
+      (over all (at-sink ?l))
+      (at start (not (broadcast-done ?l)))
+    )
+    :effect (and
+      (at end (broadcast-done ?l))
+    )
+  )
+
   (:durative-action send_sensor_sensor
     :parameters (?i ?j - sensor ?l - location)
     :duration (= ?duration 1)
     :condition (and
       (at start (at-sink ?l))
-      (at start (link ?i ?j ?l))
+      (at start (link ?i ?j))
+      (at start (broadcast-done ?l))
 
       ;; precisa ter dado e ocupação no buffer de i
       (at start (>= (buffer ?i) 1))
 
       ;; garantir espaço para receber +1 em j
-      (at start (>= (buffer-cap ?j) (+ (buffer ?j) 1)))
+      (at start (>= (buffer-capacity) (+ (buffer ?j) 1)))
 
       ;; energia suficiente para TX e RX
       (at start (>= (energy ?i) (tx-cost ?i ?j)))
@@ -85,15 +95,13 @@
     )
   )
 
-  ;; ------------------------------------
-  ;; DURATIVE-ACTION: entrega 1 unidade de dado ao sink
-  ;; ------------------------------------
   (:durative-action send_sensor_sink
     :parameters (?i - sensor ?l - location)
     :duration (= ?duration 1)
     :condition (and
       (at start (at-sink ?l))
-      (at start (visible ?i ?l))
+      (at start (reachable ?i ?l))
+      (at start (broadcast-done ?l))
 
       ;; precisa ter dado no buffer
       (at start (>= (buffer ?i) 1))
@@ -103,7 +111,7 @@
     )
     :effect (and
       (at end (decrease (buffer ?i) 1))
-      (at end (increase (collected) 1))
+      (at end (increase (sink-collected) 1))
       (at end (decrease (energy ?i) (tx-cost-sink ?i)))
     )
   )
