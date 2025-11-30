@@ -1,0 +1,202 @@
+parsing...
+contains quantified condition(s): false
+instantiating...
+duplicate arguments: adding equality conditions.
+trivial rules: converted to facts.
+starting instantiation [139 rules]...
+finding invariants...
+finding invariants... 4 initial candidates
+[0.000s cpu, 0.001s wall-clock]
+checking invariant weight... [0.000s cpu, 0.000s wall-clock]
+instantiating groups...
+choosing groups...
+14 uncovered facts (before using the results from the invariant synthesis)
+11 uncovered facts
+building translation key...
+building strips to sas dictionary...
+translating task...
+processing axioms...
+found 0 axioms that are always true and 0 that are always false
+constrained 5 conditions
+writing output...
+done!
+contains_quantified_conditions: 0
+building causal graph...
+the causal graph is not acyclic.
+variable var4 is not necessary!
+variable var5 is not necessary!
+variable var6 is not necessary!
+variable var7 is not necessary!
+variable var8 is not necessary!
+variable var9 is not necessary!
+variable var10 is not necessary!
+49 variables of 56 necessary
+18 of 18 operators necessary.
+1 of 1 axiom_relational rules necessary.
+28 of 28 axiom_functional rules necessary.
+building domain transition graphs...
+solveable in poly time 0
+building successor generator...
+all_operator_indices.size(): 18
+writing output...
+printing sg 
+49
+done
+
+
+planner paramters:
+anytime search: disabled
+timeout if plan was found: 0 seconds (no timeout)
+timeout while no plan was found: 0 seconds (no timeout)
+greedy search: disabled
+verbose: enabled
+lazy heuristic evaluation: enabled
+use caching in heuristic.
+cyclic cg heuristic: enabled 	preferred operators: enabled
+makespan heuristic: disabled 	preferred operators: disabled
+no heuristic: disabled
+cg heuristic zero cost waiting transitions: enabled
+cg heuristic fire waiting transitions only if local problems matches state: disabled
+prefopsorderedmode: enabled with 1 goals
+prefopscheapestmode: enabled with 1 goals
+prefopsmostexpensivemode: disabled with 1000 goals
+prefopsrandmode: disabled with 1000 goals
+prefopsconcurrentmode: disabled
+reset after solution was found: enabled
+reward only preferred operators queue: disabled
+gvalues by: timestamp
+queue management mode: priority based
+known by logical state only filtering: disabled
+use_subgoals_to_break_makespan_ties: disabled
+reschedule plans: enabled
+epsilonize internally: enabled
+epsilonize externally: disabled
+keep original plans: enabled
+plan name: "./output_plan"
+plan monitor file: "" (no monitoring)
+monitoring verify timestamps: disabled
+
+contains universal conditions: 0
+giving prior boost to open list 0
+init
+open list sizes (priorities): 0 (-5000),  0 (0),  0 (0),  0 (0), 
+initializing cyclic causal graph heuristic...done.
+best heuristic values of queues: 27/-1/-1/-1 [expanded 1 state(s)]
+best heuristic values of queues: 23.98/-1/-1/-1 [expanded 2 state(s)]
+best heuristic values of queues: 17/-1/-1/-1 [expanded 3 state(s)]
+best heuristic values of queues: 16.98/-1/-1/-1 [expanded 4 state(s)]
+best heuristic values of queues: 16/-1/-1/-1 [expanded 5 state(s)]
+best heuristic values of queues: 15.98/-1/-1/-1 [expanded 8 state(s)]
+best heuristic values of queues: 15/-1/-1/-1 [expanded 10 state(s)]
+best heuristic values of queues: 7.98/-1/-1/-1 [expanded 11 state(s)]
+best heuristic values of queues: 1/-1/-1/-1 [expanded 12 state(s)]
+best heuristic values of queues: 0/-1/-1/-1 [expanded 338 state(s)]
+new solution has been found.
+
+found new plan:
+0.00000000: (move_sink l0 l1) [7.00000000]
+7.01000000: (broadcast_sink l1) [1.00000000]
+8.02000000: (send_sensor_sink n1 l1) [1.00000000]
+9.03000000: (move_sink l1 l0) [7.00000000]
+16.04000000: (offload l0) [1.00000000]
+17.05000000: (move_sink l0 l1) [7.00000000]
+24.06000000: (broadcast_sink l1) [1.00000000]
+25.07000000: (send_sensor_sink n1 l1) [1.00000000]
+26.08000000: (move_sink l1 l0) [7.00000000]
+33.09000000: (offload l0) [1.00000000]
+34.10000000: (move_sink l0 l1) [7.00000000]
+41.11000000: (broadcast_sink l1) [1.00000000]
+42.12000000: (send_sensor_sink n1 l1) [1.00000000]
+43.13000000: (move_sink l1 l0) [7.00000000]
+50.14000000: (offload l0) [1.00000000]
+51.15000000: (move_sink l0 l1) [7.00000000]
+58.16000000: (broadcast_sink l1) [1.00000000]
+59.17000000: (send_sensor_sensor n2 n1 l1) [1.00000000]
+60.18000000: (send_sensor_sink n1 l1) [1.00000000]
+61.19000000: (move_sink l1 l0) [7.00000000]
+68.20000000: (offload l0) [1.00000000]
+69.21000000: (move_sink l0 l1) [7.00000000]
+76.22000000: (broadcast_sink l1) [1.00000000]
+77.23000000: (send_sensor_sensor n2 n1 l1) [1.00000000]
+78.24000000: (send_sensor_sink n1 l1) [1.00000000]
+79.25000000: (move_sink l1 l0) [7.00000000]
+86.26000000: (offload l0) [1.00000000]
+87.27000000: (move_sink l0 l1) [7.00000000]
+94.28000000: (broadcast_sink l1) [1.00000000]
+95.29000000: (send_sensor_sensor n2 n1 l1) [1.00000000]
+96.30000000: (send_sensor_sink n1 l1) [1.00000000]
+97.31000000: (move_sink l1 l0) [7.00000000]
+104.32000000: (offload l0) [1.00000000]
+rescheduled plan:
+0.00100000: (move_sink l0 l1) [7.00000000]
+7.01100000: (broadcast_sink l1) [1.00000000]
+8.02100000: (send_sensor_sink n1 l1) [1.00000000]
+9.03100000: (move_sink l1 l0) [7.00000000]
+16.04100000: (offload l0) [1.00000000]
+16.05100000: (move_sink l0 l1) [7.00000000]
+23.06100000: (broadcast_sink l1) [1.00000000]
+24.07100000: (send_sensor_sink n1 l1) [1.00000000]
+25.08100000: (move_sink l1 l0) [7.00000000]
+32.09100000: (offload l0) [1.00000000]
+32.10100000: (move_sink l0 l1) [7.00000000]
+39.11100000: (broadcast_sink l1) [1.00000000]
+40.12100000: (send_sensor_sink n1 l1) [1.00000000]
+41.13100000: (move_sink l1 l0) [7.00000000]
+48.14100000: (offload l0) [1.00000000]
+48.15100000: (move_sink l0 l1) [7.00000000]
+55.16100000: (broadcast_sink l1) [1.00000000]
+56.17100000: (send_sensor_sensor n2 n1 l1) [1.00000000]
+57.18100000: (send_sensor_sink n1 l1) [1.00000000]
+58.19100000: (move_sink l1 l0) [7.00000000]
+65.20100000: (offload l0) [1.00000000]
+65.21100000: (move_sink l0 l1) [7.00000000]
+72.22100000: (broadcast_sink l1) [1.00000000]
+73.23100000: (send_sensor_sensor n2 n1 l1) [1.00000000]
+74.24100000: (send_sensor_sink n1 l1) [1.00000000]
+75.25100000: (move_sink l1 l0) [7.00000000]
+82.26100000: (offload l0) [1.00000000]
+82.27100000: (move_sink l0 l1) [7.00000000]
+89.28100000: (broadcast_sink l1) [1.00000000]
+90.29100000: (send_sensor_sensor n2 n1 l1) [1.00000000]
+91.30100000: (send_sensor_sink n1 l1) [1.00000000]
+92.31100000: (move_sink l1 l0) [7.00000000]
+99.32100000: (offload l0) [1.00000000]
+solution with original makespan 105.32 found (ignoring no-moving-targets-rule).
+plan length: 33 step(s).
+makespan   : 100.321
+rescheduled makespan   : 100.321
+search time: 0.01 seconds - walltime: 0.0109861 seconds
+total time: 0.01 seconds - walltime: 0.0135591 seconds
+0.00100000: (move_sink l0 l1) [7.00000000]
+7.01100000: (broadcast_sink l1) [1.00000000]
+8.02100000: (send_sensor_sink n1 l1) [1.00000000]
+9.03100000: (move_sink l1 l0) [7.00000000]
+16.04100000: (offload l0) [1.00000000]
+16.05100000: (move_sink l0 l1) [7.00000000]
+23.06100000: (broadcast_sink l1) [1.00000000]
+24.07100000: (send_sensor_sink n1 l1) [1.00000000]
+25.08100000: (move_sink l1 l0) [7.00000000]
+32.09100000: (offload l0) [1.00000000]
+32.10100000: (move_sink l0 l1) [7.00000000]
+39.11100000: (broadcast_sink l1) [1.00000000]
+40.12100000: (send_sensor_sink n1 l1) [1.00000000]
+41.13100000: (move_sink l1 l0) [7.00000000]
+48.14100000: (offload l0) [1.00000000]
+48.15100000: (move_sink l0 l1) [7.00000000]
+55.16100000: (broadcast_sink l1) [1.00000000]
+56.17100000: (send_sensor_sensor n2 n1 l1) [1.00000000]
+57.18100000: (send_sensor_sink n1 l1) [1.00000000]
+58.19100000: (move_sink l1 l0) [7.00000000]
+65.20100000: (offload l0) [1.00000000]
+65.21100000: (move_sink l0 l1) [7.00000000]
+72.22100000: (broadcast_sink l1) [1.00000000]
+73.23100000: (send_sensor_sensor n2 n1 l1) [1.00000000]
+74.24100000: (send_sensor_sink n1 l1) [1.00000000]
+75.25100000: (move_sink l1 l0) [7.00000000]
+82.26100000: (offload l0) [1.00000000]
+82.27100000: (move_sink l0 l1) [7.00000000]
+89.28100000: (broadcast_sink l1) [1.00000000]
+90.29100000: (send_sensor_sensor n2 n1 l1) [1.00000000]
+91.30100000: (send_sensor_sink n1 l1) [1.00000000]
+92.31100000: (move_sink l1 l0) [7.00000000]
+99.32100000: (offload l0) [1.00000000]
