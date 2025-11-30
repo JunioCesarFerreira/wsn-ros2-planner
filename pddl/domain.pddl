@@ -4,116 +4,125 @@
     :typing
     :negative-preconditions
     :fluents
-    :numeric-fluents
     :durative-actions
     :equality
   )
 
+  ;; ------------------------------------
+  ;; Tipos
+  ;; ------------------------------------
   (:types
     sensor
     location
   )
 
   ;; ------------------------------------
-  ;; Predicados (qualitativos)
+  ;; Predicados
   ;; ------------------------------------
   (:predicates
-    (at-sink ?l - location)
+    (at-sink ?l - location)      ;; posição atual do sink
+    (is-base ?l - location)      ;; a base é um location marcado com is-base
     (adjacent ?l1 ?l2 - location)
-    (reachable ?i - sensor ?l - location)   ;; sensor i consegue "ver" o sink em l
-    (link ?i - sensor ?j - sensor)          ;; enlace lógico entre sensores
-    (broadcast-done ?l - location)          ;; broadcast concluído em l
+    (reachable ?l - location ?i - sensor)
+    (link ?i - sensor ?j - sensor)
+    (broadcast-done ?l - location)
   )
 
   ;; ------------------------------------
   ;; Fluentes numéricos
   ;; ------------------------------------
   (:functions
-    (energy ?i - sensor)        ; energia do sensor i
-    (buffer ?i - sensor)        ; dados no buffer do sensor i
-    (buffer-capacity)           ; capacidade de buffer dos sensores (constante global)
-    (movement-cost ?l1 ?l2 - location) ; custo de movimento entre localidades
-    (sink-energy)               ; energia do sink
-    (sink-collected)            ; quantidade de dados armazenados no sink
-    (sink-capacity)             ; capacidade do buffer do sink (constante global)
+    (energy ?i - sensor)
+    (buffer ?i - sensor)
+    (buffer-capacity)   ;; capacidade comum a todos os sensores
+
+    (movement-energy-cost ?l1 ?l2 - location)
+    (movement-time-cost   ?l1 ?l2 - location)
+
+    (sink-energy)
+    (sink-max-energy)
+    (sink-collected)
+    (sink-delivered)
+    (sink-capacity)
+
     (tx-cost ?i - sensor ?j - sensor)
     (rx-cost ?i - sensor ?j - sensor)
-    (tx-cost-sink ?i - sensor)
+    (tx-cost-sink ?l - location ?i - sensor)
+    (rx-cost-sink ?l - location ?i - sensor)
   )
 
   ;; ------------------------------------
-  ;; DURATIVE-ACTION: mover o sink
+  ;; Movimento do sink (genérico)
   ;; ------------------------------------
   (:durative-action move_sink
     :parameters (?from ?to - location)
-    :duration (= ?duration 1)
+    :duration (= ?duration (movement-time-cost ?from ?to))
     :condition (and
       (at start (at-sink ?from))
       (at start (adjacent ?from ?to))
-      ;; energia do sink suficiente para pagar o movimento
-      (at start (>= (sink-energy) (movement-cost ?from ?to)))
+      (at start (>= (sink-energy) (movement-energy-cost ?from ?to)))
     )
     :effect (and
-      ;; o sink deixa o local de origem imediatamente
       (at start (not (at-sink ?from)))
-
-      ;; ao final, o sink chega ao destino
       (at end   (at-sink ?to))
-
-      ;; desconta energia pelo movimento
-      (at end (decrease (sink-energy) (movement-cost ?from ?to)))
-
-      ;; ao sair de um local, o "broadcast" daquele local deixa de valer
+      (at end   (decrease (sink-energy) (movement-energy-cost ?from ?to)))
       (at end (not (broadcast-done ?from)))
-
-      ;; garantir que no novo local o broadcast comece "desligado"
       (at end (not (broadcast-done ?to)))
     )
   )
 
   ;; ------------------------------------
-  ;; DURATIVE-ACTION: broadcast do sink em um local
+  ;; Movimento do sink especificamente até a base
+  ;; (poderia ser só uma instância de move_sink com is-base no problema,
+  ;; mas deixei como ação separada se quiser diferenciar).
+  ;; ------------------------------------
+  (:durative-action sink_go_to_base
+    :parameters (?from ?to - location)
+    :duration (= ?duration (movement-time-cost ?from ?to))
+    :condition (and
+      (at start (is-base ?to))
+      (at start (at-sink ?from))
+      (at start (adjacent ?from ?to))
+      (at start (>= (sink-energy) (movement-energy-cost ?from ?to)))
+    )
+    :effect (and
+      (at start (not (at-sink ?from)))
+      (at end   (at-sink ?to))
+      (at end   (decrease (sink-energy) (movement-energy-cost ?from ?to)))
+      (at end   (not (broadcast-done ?from)))
+      (at end   (not (broadcast-done ?to)))
+    )
+  )
+
+  ;; ------------------------------------
+  ;; Broadcast do sink em um location
   ;; ------------------------------------
   (:durative-action broadcast_sink
     :parameters (?l - location)
     :duration (= ?duration 1)
     :condition (and
-      ;; o sink precisa estar em l no início
       (at start (at-sink ?l))
-      ;; e permanecer em l durante todo o broadcast
       (over all (at-sink ?l))
-      ;; não repetir broadcast se já foi feito nesse local
       (at start (not (broadcast-done ?l)))
     )
     :effect (and
-      ;; ao final, marcamos que o broadcast foi concluído em l
       (at end (broadcast-done ?l))
     )
   )
 
   ;; ------------------------------------
-  ;; DURATIVE-ACTION: enviar 1 unidade de dado i -> j
-  ;; (roteamento sensor-sensor)
+  ;; Envio sensor-sensor
   ;; ------------------------------------
   (:durative-action send_sensor_sensor
     :parameters (?i ?j - sensor ?l - location)
     :duration (= ?duration 1)
     :condition (and
-      ;; o sink está em l e já fez broadcast em l
       (at start (at-sink ?l))
       (over all (at-sink ?l))
       (at start (broadcast-done ?l))
-
-      ;; enlace lógico entre i e j
       (at start (link ?i ?j))
-
-      ;; precisa ter dado no buffer de i
       (at start (>= (buffer ?i) 1))
-
-      ;; garantir espaço no buffer de j (sem usar soma explícita)
-      (at start (< (buffer ?j) (buffer-capacity)))
-
-      ;; energia suficiente para TX e RX
+      (at start (>= (buffer-capacity) (buffer ?j)))
       (at start (>= (energy ?i) (tx-cost ?i ?j)))
       (at start (>= (energy ?j) (rx-cost ?i ?j)))
     )
@@ -126,35 +135,58 @@
   )
 
   ;; ------------------------------------
-  ;; DURATIVE-ACTION: entrega 1 unidade de dado ao sink
+  ;; Envio sensor -> sink
   ;; ------------------------------------
   (:durative-action send_sensor_sink
     :parameters (?i - sensor ?l - location)
     :duration (= ?duration 1)
     :condition (and
-      ;; sink presente em l durante todo o envio
       (at start (at-sink ?l))
       (over all (at-sink ?l))
-
-      ;; sensor i consegue alcançar o sink em l
-      (at start (reachable ?i ?l))
-
-      ;; broadcast já foi feito em l
+      (at start (reachable ?l ?i))
       (at start (broadcast-done ?l))
-
-      ;; precisa ter dado no buffer do sensor
       (at start (>= (buffer ?i) 1))
-
-      ;; energia suficiente para TX até o sink
-      (at start (>= (energy ?i) (tx-cost-sink ?i)))
-
-      ;; capacidade de buffer do sink: ainda há espaço
-      (at start (< (sink-collected) (sink-capacity)))
+      (at start (>= (energy ?i) (tx-cost-sink ?l ?i)))
+      (at start (>= (sink-capacity) (sink-collected)))
     )
     :effect (and
       (at end (decrease (buffer ?i) 1))
       (at end (increase (sink-collected) 1))
-      (at end (decrease (energy ?i) (tx-cost-sink ?i)))
+      (at end (decrease (energy ?i) (tx-cost-sink ?l ?i)))
+      (at end (decrease (sink-energy) (rx-cost-sink ?l ?i)))
+    )
+  )
+
+  ;; ------------------------------------
+  ;; Offload na base
+  ;; ------------------------------------
+  (:durative-action offload
+    :parameters (?b - location)
+    :duration (= ?duration 1)
+    :condition (and
+      (at start (at-sink ?b))
+      (at start (is-base ?b))
+      (at start (>= (sink-collected) 1))
+    )
+    :effect (and
+      (at end (increase (sink-delivered) 1))
+      (at end (decrease (sink-collected) 1))
+    )
+  )
+
+  ;; ------------------------------------
+  ;; Recarga na base
+  ;; ------------------------------------
+  (:durative-action recharge
+    :parameters (?b - location)
+    :duration (= ?duration 1)
+    :condition (and
+      (at start (at-sink ?b))
+      (at start (is-base ?b))
+      (at start (>= (sink-max-energy) (sink-energy)))
+    )
+    :effect (and
+      (at end (increase (sink-energy) 1))
     )
   )
 )

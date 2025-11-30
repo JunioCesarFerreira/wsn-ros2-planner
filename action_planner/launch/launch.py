@@ -58,27 +58,6 @@ def generate_launch_description():
             output='screen',
             parameters=[]
         ),
-        Node(
-            package='action_planner',
-            executable='move_sink.py',
-            name='move_sink',
-            output='screen',
-            parameters=[]
-        ),
-        Node(
-            package='action_planner',
-            executable='send_sensor_sensor.py',
-            name='send_sensor_sensor',
-            output='screen',
-            parameters=[]
-        ),
-        Node(
-            package='action_planner',
-            executable='send_sensor_sink.py',
-            name='send_sensor_sink',
-            output='screen',
-            parameters=[]
-        ),
     ]
 
     # Create the launch description and populate

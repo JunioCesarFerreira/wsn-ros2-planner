@@ -191,18 +191,6 @@ nodes = [
         'depends_on': []
     },
     {
-        'node_name': 'move_sink',
-        'depends_on': []
-    },
-    {
-        'node_name': 'send_sensor_sensor',
-        'depends_on': []
-    },
-    {
-        'node_name': 'send_sensor_sink',
-        'depends_on': []
-    },
-    {
         'node_name': 'mission_controller',
         'depends_on': ['action_planner']
     }

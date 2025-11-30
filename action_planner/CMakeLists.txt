@@ -36,9 +36,6 @@ install(PROGRAMS
   scripts/action_planner.py
   scripts/lifecycle_manager.py
   scripts/mission_controller.py
-  scripts/move_sink.py
-  scripts/send_sensor_sensor.py
-  scripts/send_sensor_sink.py
   DESTINATION lib/${PROJECT_NAME})
 
 
