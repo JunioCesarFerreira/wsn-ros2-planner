@@ -1,0 +1,82 @@
+domain parsed
+problem parsed
+grounding..
+grounding time: 34
+aibr preprocessing
+|f|:6
+|x|:9
+|a|:18
+|p|:0
+|e|:0
+h1 setup time (msec): 11
+ g(n)= 4.0 h(n)=15.0
+ g(n)= 8.0 h(n)=9.0
+ g(n)= 27.0 h(n)=8.0
+ g(n)= 29.0 h(n)=7.0
+ g(n)= 44.0 h(n)=6.0
+ g(n)= 80.0 h(n)=5.0
+ g(n)= 92.0 h(n)=4.0
+ g(n)= 50.0 h(n)=3.0
+ g(n)= 52.0 h(n)=2.0
+ g(n)= 79.0 h(n)=1.0
+problem solved
+
+found plan:
+0.0: (move_sink l0 l1)
+1.0: (broadcast_sink l1)
+2.0: (send_sensor_sensor n2 n1 l1)
+3.0: (send_sensor_sensor n2 n1 l1)
+4.0: (send_sensor_sensor n2 n1 l1)
+5.0: (send_sensor_sink n1 l1)
+6.0: (send_sensor_sensor n1 n2 l1)
+7.0: (send_sensor_sink n1 l1)
+8.0: (send_sensor_sensor n2 n1 l1)
+9.0: (send_sensor_sink n1 l1)
+10.0: (send_sensor_sink n1 l1)
+11.0: (send_sensor_sink n1 l1)
+12.0: (send_sensor_sink n1 l1)
+13.0: (move_sink l1 l0)
+14.0: (offload l0)
+15.0: (offload l0)
+16.0: (offload l0)
+17.0: (offload l0)
+18.0: (offload l0)
+19.0: (recharge l0)
+20.0: (move_sink l0 l1)
+21.0: (move_sink l1 l0)
+22.0: (recharge l0)
+23.0: (recharge l0)
+24.0: (recharge l0)
+25.0: (offload l0)
+26.0: (move_sink l0 l1)
+27.0: (move_sink l1 l2)
+28.0: (broadcast_sink l2)
+29.0: (send_sensor_sink n3 l2)
+30.0: (send_sensor_sink n3 l2)
+31.0: (move_sink l2 l1)
+32.0: (move_sink l1 l0)
+33.0: (offload l0)
+34.0: (recharge l0)
+35.0: (move_sink l0 l1)
+36.0: (move_sink l1 l0)
+37.0: (recharge l0)
+38.0: (recharge l0)
+39.0: (recharge l0)
+40.0: (move_sink l0 l1)
+41.0: (move_sink l1 l2)
+42.0: (broadcast_sink l2)
+43.0: (send_sensor_sink n3 l2)
+44.0: (move_sink l2 l1)
+45.0: (move_sink l1 l0)
+46.0: (offload l0)
+47.0: (offload l0)
+
+plan-length:48
+metric (search):80.0
+planning time (msec): 5143
+heuristic time (msec): 3313
+search time (msec): 5139
+expanded nodes:453650
+states evaluated:616801
+number of dead-ends detected:44553
+number of duplicates detected:983548

@@ -1,0 +1,15 @@
+domain parsed
+problem parsed
+grounding..
+grounding time: 190
+aibr preprocessing
+|f|:24
+|x|:35
+|a|:551
+|p|:0
+|e|:0
+h1 setup time (msec): 34
+ g(n)= 21.0 h(n)=120.0
+ g(n)= 55.0 h(n)=80.0
+-------------time: 10s ; expanded nodes: 1497 (avg-speed 149.0 n/s); evaluated states: 36545
+-------------time: 20s ; expanded nodes: 3303 (avg-speed 165.0 n/s); evaluated states: 75701
